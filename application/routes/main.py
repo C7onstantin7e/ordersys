@@ -7,3 +7,7 @@ main_bp = Blueprint('main', __name__)
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+@main_bp.route('/health')
+def health_check():
+    return 'OK', 200

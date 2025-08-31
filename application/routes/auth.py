@@ -27,7 +27,7 @@ def login():
             flash('Вы успешно вошли!', 'success')
             return redirect(url_for('products.list_products'))
         flash('Неверный логин или пароль', 'danger')
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/login.html', form=form, is_index=True)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -47,12 +47,12 @@ def register():
         except Exception as e:
             mysql.connection.rollback()
             flash(f'Ошибка регистрации: {str(e)}', 'danger')
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register.html', form=form, is_index=True)
 
 @auth_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('Вы вышли из системы', 'info')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login', is_index=False))
 

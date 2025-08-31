@@ -15,4 +15,4 @@ def manage_users():
     cur.execute("SELECT id, username, email, role, created_at FROM users")
     users = cur.fetchall()
     cur.close()
-    return render_template('admin/users.html', users=users)
+    return render_template('admin/users.html', users=users, is_index=True)

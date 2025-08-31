@@ -159,57 +159,59 @@
         </div>
     </div>
 
+    {% if is_index %}
     <!-- Футер -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5><i class="bi bi-box-seam"></i> Система заказов</h5>
-                    <p class="text-muted">
-                        Профессиональное решение для управления заказами, товарами и магазинами.
-                    </p>
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-4 mb-md-0">
+                        <h5><i class="bi bi-box-seam"></i> Система заказов</h5>
+                        <p class="text-muted">
+                            Профессиональное решение для управления заказами, товарами и магазинами.
+                        </p>
+                    </div>
+
+                    <div class="col-md-4 mb-4 mb-md-0 footer-links">
+                        <h5>Навигация</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ url_for('products.list_products') }}"><i class="bi bi-house-door"></i> Главная</a></li>
+                            <li><a href="{{ url_for('orders.list_orders') }}"><i class="bi bi-list-check"></i> Заказы</a></li>
+                            <li><a href="{{ url_for('shops.list_shops') }}"><i class="bi bi-shop"></i> Магазины</a></li>
+                            <li><a href="{{ url_for('products.list_products') }}"><i class="bi bi-box"></i> Товары</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-4 footer-contact">
+                        <h5>Контакты</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-envelope"></i> support@ordersystem.com</li>
+                            <li><i class="bi bi-telephone"></i> +7 (123) 456-78-90</li>
+                            <li><i class="bi bi-geo-alt"></i> Уездный город Н</li>
+                            <li class="mt-2">
+                                <a href="#" class="text-decoration-none me-2"><i class="bi bi-telegram"></i></a>
+                                <a href="#" class="text-decoration-none me-2"><i class="bi bi-whatsapp"></i></a>
+                                <a href="#" class="text-decoration-none"><i class="bi bi-facebook"></i></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="col-md-4 mb-4 mb-md-0 footer-links">
-                    <h5>Навигация</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ url_for('products.list_products') }}"><i class="bi bi-house-door"></i> Главная</a></li>
-                        <li><a href="{{ url_for('orders.list_orders') }}"><i class="bi bi-list-check"></i> Заказы</a></li>
-                        <li><a href="{{ url_for('shops.list_shops') }}"><i class="bi bi-shop"></i> Магазины</a></li>
-                        <li><a href="{{ url_for('products.list_products') }}"><i class="bi bi-box"></i> Товары</a></li>
-                    </ul>
-                </div>
+                <hr class="my-4">
 
-                <div class="col-md-4 footer-contact">
-                    <h5>Контакты</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-envelope"></i> support@ordersystem.com</li>
-                        <li><i class="bi bi-telephone"></i> +7 (123) 456-78-90</li>
-                        <li><i class="bi bi-geo-alt"></i> Уездный город Н</li>
-                        <li class="mt-2">
-                            <a href="#" class="text-decoration-none me-2"><i class="bi bi-telegram"></i></a>
-                            <a href="#" class="text-decoration-none me-2"><i class="bi bi-whatsapp"></i></a>
-                            <a href="#" class="text-decoration-none"><i class="bi bi-facebook"></i></a>
-                        </li>
-                    </ul>
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="text-muted mb-0">&copy; 2025 Система заказов. Все права защищены.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <p class="text-muted mb-0">
+                            <a href="#" class="text-decoration-none me-3">Политика конфиденциальности</a>
+                            <a href="#" class="text-decoration-none">Условия использования</a>
+                        </p>
+                    </div>
                 </div>
             </div>
-
-            <hr class="my-4">
-
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="text-muted mb-0">&copy; 2025 Система заказов. Все права защищены.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <p class="text-muted mb-0">
-                        <a href="#" class="text-decoration-none me-3">Политика конфиденциальности</a>
-                        <a href="#" class="text-decoration-none">Условия использования</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    {% endif %}
 
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

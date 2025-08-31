@@ -121,3 +121,181 @@ body {
     background-color: #0d6efd;
     color: white;
 }
+
+/* static/css/style.css - добавляем в конец */
+
+/* Основной контейнер для растягивания страницы */
+.main-content-expandable {
+    min-height: calc(100vh - 200px); /* Минимальная высота */
+    padding-bottom: 100px; /* Отступ для кнопок */
+    position: relative;
+}
+
+/* Контейнер для кнопок, который остается внизу видимой области */
+.sticky-bottom-buttons {
+    position: sticky;
+    bottom: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    margin-top: 30px;
+    border: 1px solid #e9ecef;
+}
+
+/* Контейнер для товаров с автоматическим расширением */
+.items-container-auto {
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* Кнопки в стике */
+.sticky-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.sticky-buttons-container .btn {
+    margin-top: 0;
+    flex: 1;
+    padding: 12px 25px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+/* Анимация для плавного появления кнопок */
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.sticky-bottom-buttons {
+    animation: slideInUp 0.3s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .sticky-bottom-buttons {
+        bottom: 10px;
+        padding: 15px;
+        margin: 15px;
+    }
+
+    .sticky-buttons-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .sticky-buttons-container .btn {
+        width: 100%;
+    }
+
+    .main-content-expandable {
+        padding-bottom: 120px;
+    }
+}
+
+/* Подсветка нового товара */
+.item-row.highlight {
+    animation: highlight 1.5s ease-in-out;
+    border-left: 4px solid #0d6efd !important;
+}
+
+/* static/css/style.css - добавляем в конец */
+
+/* Основной контейнер */
+.order-form-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+}
+
+/* Контейнер для товаров */
+.items-container-auto {
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+/* Кнопки в потоке документа */
+.form-buttons-container {
+    background: white;
+    padding: 25px 0;
+    border-top: 2px solid #f0f0f0;
+    margin-top: auto; /* Прижимаем к низу */
+    position: relative;
+    z-index: 10;
+}
+
+.buttons-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.buttons-row .btn {
+    margin-top: 0;
+    padding: 15px 30px;
+    font-weight: 500;
+    font-size: 16px;
+    flex: 1;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .buttons-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .buttons-row .btn {
+        width: 100%;
+    }
+}
+
+/* Подсветка нового товара */
+.item-row.highlight {
+    animation: highlight 1s ease-in-out;
+    border-left: 4px solid #0d6efd !important;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+/* Убираем лишние отступы */
+.container {
+    padding-bottom: 0;
+}
+
+/* Гарантируем что кнопки всегда в потоке */
+.form-buttons-container {
+    position: static !important;
+    bottom: auto !important;
+    top: auto !important;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgba(13, 110, 253, 0.1);
+        transform: translateX(-5px);
+    }
+    100% {
+        background-color: transparent;
+        transform: translateX(0);
+    }
+}

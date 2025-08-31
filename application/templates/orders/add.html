@@ -2,94 +2,100 @@
 
 {% block content %}
 <div class="container">
-    <h2>Новый заказ</h2>
+    <div class="order-form-container">
+        <h2>Новый заказ</h2>
 
-    <form method="POST" id="order-form">
-        {{ form.csrf_token }}
+        <form method="POST" id="order-form">
+            {{ form.csrf_token }}
 
-        <!-- Поле поиска магазина -->
-        <div class="mb-4">
-            <label class="form-label fw-bold">Магазин</label>
-            <input type="text"
-                   id="shop-search"
-                   class="form-control"
-                   placeholder="Начните вводить название магазина"
-                   autocomplete="off"
-                   {% if shop_name %}value="{{ shop_name }}"{% endif %}>
-            <input type="hidden" name="shop_id" id="selected-shop-id" value="{{ form.shop_id.data if form.shop_id.data else '' }}">
-            <div id="shop-suggestions" class="suggestions-container"></div>
-            {% if form.shop_id.errors %}
-                <div class="alert alert-danger mt-2">
-                    {% for error in form.shop_id.errors %}
-                        {{ error }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <h4 class="mb-3">Товары:</h4>
-
-        <div id="items-container">
-            {% for item in form.items %}
-            <div class="item-row mb-3 border p-3 rounded">
-                <div class="row align-items-center">
-                    <div class="col-md-7">
-                        <label class="form-label">Товар</label>
-                        <input type="text"
-                               class="form-control product-search"
-                               placeholder="Начните вводить название товара"
-                               autocomplete="off"
-                               {% if product_names and item.form.product_id.data in product_names %}value="{{ product_names[item.form.product_id.data] }}"{% endif %}>
-                        <input type="hidden"
-                               name="items-{{ loop.index0 }}-product_id"
-                               class="selected-product-id"
-                               value="{{ item.form.product_id.data if item.form.product_id.data else '' }}">
-                        <div class="product-suggestions suggestions-container"></div>
-                        {% if item.form.product_id.errors %}
-                            <div class="alert alert-danger mt-2">
-                                {% for error in item.form.product_id.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+            <!-- Поле поиска магазина -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Магазин</label>
+                <input type="text"
+                       id="shop-search"
+                       class="form-control"
+                       placeholder="Начните вводить название магазина"
+                       autocomplete="off"
+                       {% if shop_name %}value="{{ shop_name }}"{% endif %}>
+                <input type="hidden" name="shop_id" id="selected-shop-id" value="{{ form.shop_id.data if form.shop_id.data else '' }}">
+                <div id="shop-suggestions" class="suggestions-container"></div>
+                {% if form.shop_id.errors %}
+                    <div class="alert alert-danger mt-2">
+                        {% for error in form.shop_id.errors %}
+                            {{ error }}
+                        {% endfor %}
                     </div>
+                {% endif %}
+            </div>
 
-                    <div class="col-md-5 d-flex justify-content-end">
-                        <div class="w-100">
-                            <label class="form-label">Количество</label>
-                            <div class="d-flex align-items-center gap-2">
-                                <input type="number"
-                                       name="items-{{ loop.index0 }}-quantity"
-                                       class="form-control"
-                                       value="{{ item.form.quantity.data if item.form.quantity.data else 1 }}"
-                                       min="1">
-                                <button type="button" class="btn btn-sm btn-danger remove-item mt-2">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                            {% if item.form.quantity.errors %}
+            <h4 class="mb-3">Товары:</h4>
+
+            <!-- Контейнер для товаров -->
+            <div id="items-container" class="items-container-auto">
+                {% for item in form.items %}
+                <div class="item-row mb-3 border p-3 rounded">
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                            <label class="form-label">Товар</label>
+                            <input type="text"
+                                   class="form-control product-search"
+                                   placeholder="Начните вводить название товара"
+                                   autocomplete="off"
+                                   {% if product_names and item.form.product_id.data in product_names %}value="{{ product_names[item.form.product_id.data] }}"{% endif %}>
+                            <input type="hidden"
+                                   name="items-{{ loop.index0 }}-product_id"
+                                   class="selected-product-id"
+                                   value="{{ item.form.product_id.data if item.form.product_id.data else '' }}">
+                            <div class="product-suggestions suggestions-container"></div>
+                            {% if item.form.product_id.errors %}
                                 <div class="alert alert-danger mt-2">
-                                    {% for error in item.form.quantity.errors %}
+                                    {% for error in item.form.product_id.errors %}
                                         {{ error }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
                         </div>
+
+                        <div class="col-md-5 d-flex justify-content-end">
+                            <div class="w-100">
+                                <label class="form-label">Количество</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="number"
+                                           name="items-{{ loop.index0 }}-quantity"
+                                           class="form-control quantity-input"
+                                           value="{{ item.form.quantity.data if item.form.quantity.data else 1 }}"
+                                           min="1">
+                                    <button type="button" class="btn btn-sm btn-danger remove-item mt-2">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                {% if item.form.quantity.errors %}
+                                    <div class="alert alert-danger mt-2">
+                                        {% for error in item.form.quantity.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <button type="button" id="add-item" class="btn btn-outline-primary">
-                <i class="bi bi-plus-lg me-2"></i> Добавить товар
-            </button>
-            <button type="submit" class="btn btn-success px-4 py-2 fw-bold">
-                <i class="bi bi-check2-circle me-2"></i> Создать заказ
-            </button>
-        </div>
-    </form>
+            <!-- Кнопки в потоке документа -->
+            <div class="form-buttons-container">
+                <div class="buttons-row">
+                    <button type="button" id="add-item-btn" class="btn btn-outline-primary">
+                        <i class="bi bi-plus-lg me-2"></i> Добавить товар
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check2-circle me-2"></i> Создать заказ
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <style>
@@ -121,96 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
         products: '/api/search/products'
     };
 
-    // Функция для отображения подсказок
-    function showSuggestions(container, items, inputField, idField) {
-        container.innerHTML = '';
-        if (!items || items.length === 0) {
-            container.style.display = 'none';
-            return;
-        }
+    let isAddingProduct = false; // Флаг чтобы предотвратить двойное добавление
 
-        container.style.display = 'block';
+    // Функция для добавления нового товара
+    function addNewProductItem() {
+        if (isAddingProduct) return; // Защита от двойного добавления
 
-        items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'suggestion-item';
-            div.textContent = item.name;
-// В функции showSuggestions
-            div.onclick = () => {
-                console.log(`Выбран магазин: ${item.name} (ID: ${item.id})`);
-                inputField.value = item.name;
-                idField.value = item.id;
-                container.style.display = 'none';
+        isAddingProduct = true;
 
-    // Добавьте отладочную информацию
-    console.log("Установлено значение скрытого поля:", idField.value);
-};
-            container.appendChild(div);
-        });
-    }
-
-    // Поиск магазинов с debounce
-    const shopSearch = document.getElementById('shop-search');
-    const shopSuggestions = document.getElementById('shop-suggestions');
-    const selectedShopId = document.getElementById('selected-shop-id');
-
-    let searchTimeout;
-    shopSearch.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(async () => {
-            const query = this.value.trim();
-            if (query.length < 1) {
-                shopSuggestions.style.display = 'none';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_ENDPOINTS.shops}?q=${encodeURIComponent(query)}`);
-                const shops = await response.json();
-                showSuggestions(shopSuggestions, shops, shopSearch, selectedShopId);
-            } catch (error) {
-                console.error('Ошибка поиска магазинов:', error);
-            }
-        }, 300);
-    });
-
-    // Обработчик для товаров с debounce
-    document.addEventListener('input', function(e) {
-        if (!e.target.classList.contains('product-search')) return;
-
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(async () => {
-            const input = e.target;
-            const container = input.nextElementSibling.nextElementSibling;
-            const idField = input.nextElementSibling;
-            const query = input.value.trim();
-
-            if (query.length < 1) {
-                container.style.display = 'none';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_ENDPOINTS.products}?q=${encodeURIComponent(query)}`);
-                const products = await response.json();
-                showSuggestions(container, products, input, idField);
-            } catch (error) {
-                console.error('Ошибка поиска товаров:', error);
-            }
-        }, 300);
-    });
-
-    // Закрытие подсказок
-    document.addEventListener('click', function(e) {
-        if (!e.target.matches('.product-search, #shop-search, .suggestion-item')) {
-            document.querySelectorAll('.suggestions-container').forEach(el => {
-                el.style.display = 'none';
-            });
-        }
-    });
-
-    // Добавление нового товара
-    document.getElementById('add-item').addEventListener('click', function() {
         const container = document.getElementById('items-container');
         const index = container.children.length;
 
@@ -235,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="d-flex align-items-center gap-2">
                             <input type="number"
                                    name="items-${index}-quantity"
-                                   class="form-control"
+                                   class="form-control quantity-input"
                                    value="1"
                                    min="1">
                             <button type="button" class="btn btn-sm btn-danger remove-item mt-2">
@@ -248,7 +172,175 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         container.appendChild(newItem);
+
+        // Подсвечиваем новый товар
+        newItem.classList.add('highlight');
+        setTimeout(() => {
+            newItem.classList.remove('highlight');
+        }, 1000);
+
+        // Обновляем обработчики для нового элемента
+        initProductSearch(newItem);
+
+        // Фокусируемся на поле ввода после небольшой задержки
+        setTimeout(() => {
+            const searchInput = newItem.querySelector('.product-search');
+            if (searchInput) {
+                searchInput.focus();
+            }
+            isAddingProduct = false;
+        }, 100);
+    }
+
+    // Обработчик клавиши Enter
+    function handleEnterKey(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+
+            // Enter в поле поиска товара
+            if (event.target.classList.contains('product-search')) {
+                addNewProductItem();
+                return false;
+            }
+
+            // Enter в поле количества
+            if (event.target.classList.contains('quantity-input')) {
+                // Находим следующий товар или добавляем новый
+                const currentRow = event.target.closest('.item-row');
+                const nextRow = currentRow.nextElementSibling;
+
+                if (nextRow) {
+                    const nextSearchInput = nextRow.querySelector('.product-search');
+                    if (nextSearchInput) {
+                        nextSearchInput.focus();
+                    }
+                } else {
+                    addNewProductItem();
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Инициализация поиска для элемента
+    function initProductSearch(element) {
+        const searchInput = element.querySelector('.product-search');
+        const suggestionsContainer = element.querySelector('.suggestions-container');
+        const idField = element.querySelector('.selected-product-id');
+
+        if (searchInput) {
+            // Обработчик input с debounce
+            const debouncedSearch = debounce(async function() {
+                const query = this.value.trim();
+                if (query.length < 1) {
+                    suggestionsContainer.style.display = 'none';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${API_ENDPOINTS.products}?q=${encodeURIComponent(query)}`);
+                    const products = await response.json();
+                    showSuggestions(suggestionsContainer, products, searchInput, idField);
+                } catch (error) {
+                    console.error('Ошибка поиска товаров:', error);
+                }
+            }, 300);
+
+            searchInput.addEventListener('input', debouncedSearch);
+        }
+    }
+
+    // Функция debounce
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Функция для отображения подсказок
+    function showSuggestions(container, items, inputField, idField) {
+        container.innerHTML = '';
+        if (!items || items.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'suggestion-item';
+            div.textContent = item.name;
+            div.onclick = () => {
+                inputField.value = item.name;
+                idField.value = item.id;
+                container.style.display = 'none';
+
+                // После выбора товара фокусируемся на количестве
+                const quantityInput = inputField.closest('.item-row').querySelector('.quantity-input');
+                if (quantityInput) {
+                    setTimeout(() => {
+                        quantityInput.focus();
+                        quantityInput.select();
+                    }, 100);
+                }
+            };
+            container.appendChild(div);
+        });
+    }
+
+    // Инициализация поиска магазинов
+    const shopSearch = document.getElementById('shop-search');
+    const shopSuggestions = document.getElementById('shop-suggestions');
+    const selectedShopId = document.getElementById('selected-shop-id');
+
+    if (shopSearch) {
+        shopSearch.addEventListener('input', debounce(async function() {
+            const query = this.value.trim();
+            if (query.length < 1) {
+                shopSuggestions.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_ENDPOINTS.shops}?q=${encodeURIComponent(query)}`);
+                const shops = await response.json();
+                showSuggestions(shopSuggestions, shops, shopSearch, selectedShopId);
+            } catch (error) {
+                console.error('Ошибка поиска магазинов:', error);
+            }
+        }, 300));
+
+        // Enter в поиске магазина - переход к первому товару
+        shopSearch.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const firstProductInput = document.querySelector('.product-search');
+                if (firstProductInput) {
+                    firstProductInput.focus();
+                }
+            }
+        });
+    }
+
+    // Закрытие подсказок
+    document.addEventListener('click', function(e) {
+        if (!e.target.matches('.product-search, #shop-search, .suggestion-item')) {
+            document.querySelectorAll('.suggestions-container').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
     });
+
+    // Добавление нового товара по кнопке
+    document.getElementById('add-item-btn').addEventListener('click', addNewProductItem);
 
     // Удаление товара
     document.addEventListener('click', function(e) {
@@ -261,29 +353,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-document.getElementById('order-form').addEventListener('submit', function(e) {
-    const shopId = document.getElementById('selected-shop-id').value;
-    const productIds = document.querySelectorAll('.selected-product-id');
 
-    // Проверка магазина
-    if (!shopId) {
-        e.preventDefault();
-        alert('Пожалуйста, выберите магазин');
-        return false;
-    }
+    // Глобальный обработчик клавиш
+    document.addEventListener('keydown', handleEnterKey);
 
-    // Проверка товаров
-    let hasProducts = false;
-    productIds.forEach(field => {
-        if (field.value) hasProducts = true;
+    // Валидация формы
+    document.getElementById('order-form').addEventListener('submit', function(e) {
+        const shopId = document.getElementById('selected-shop-id').value;
+        const productIds = document.querySelectorAll('.selected-product-id');
+
+        if (!shopId) {
+            e.preventDefault();
+            alert('Пожалуйста, выберите магазин');
+            shopSearch.focus();
+            return false;
+        }
+
+        let hasProducts = false;
+        productIds.forEach(field => {
+            if (field.value) hasProducts = true;
+        });
+
+        if (!hasProducts) {
+            e.preventDefault();
+            alert('Добавьте хотя бы один товар');
+            return false;
+        }
+
+        return true;
     });
 
-    if (!hasProducts) {
-        e.preventDefault();
-        alert('Добавьте хотя бы один товар');
-        return false;
-    }
-});
+    // Инициализация существующих элементов
+    document.querySelectorAll('.item-row').forEach(initProductSearch);
 });
 </script>
 {% endblock %}

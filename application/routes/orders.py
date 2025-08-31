@@ -31,7 +31,7 @@ def add_order():
         # Если все еще нет, создаем ошибку
         if not shop_id:
             flash('Магазин не выбран', 'danger')
-            return render_template('orders/add.html', form=form)
+            return render_template('orders/add.html', form=form, is_index=False)
 
         form.shop_id.data = shop_id
 
@@ -111,7 +111,7 @@ def add_order():
             flash(error_msg, 'danger')
             current_app.logger.error(error_msg)
 
-    return render_template('orders/add.html', form=form)
+    return render_template('orders/add.html', form=form, is_index=False)
 
 
 @orders_bp.route('/list')
@@ -138,7 +138,7 @@ def list_orders():
                     o.created_at DESC
             """)
             orders = cur.fetchall()
-            return render_template('orders/list.html', orders=orders)
+            return render_template('orders/list.html', orders=orders, is_index=False)
 
     except Exception as e:
         current_app.logger.error(f"Error in list_orders: {str(e)}", exc_info=True)
@@ -151,7 +151,7 @@ def list_orders():
 def order_details(order_id):
     if current_user.role not in ['admin', 'moderator', 'operator']:
         flash('У вас нет прав для просмотра деталей заказов', 'danger')
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.dashboard', is_index=False))
 
     try:
         with mysql.connection.cursor() as cur:
@@ -198,12 +198,12 @@ def order_details(order_id):
             """, (order_id,))
             items = cur.fetchall()
 
-            return render_template('orders/details.html', order=order, items=items)
+            return render_template('orders/details.html', order=order, items=items, is_index=False)
 
     except Exception as e:
         current_app.logger.error(f"Error in order_details: {str(e)}", exc_info=True)
         flash('Ошибка при загрузке деталей заказа', 'danger')
-        return redirect(url_for('orders.list_orders'))
+        return redirect(url_for('orders.list_orders', is_index=False))
 
 
 @orders_bp.route('/edit/<int:order_id>', methods=['GET', 'POST'])
@@ -211,7 +211,7 @@ def order_details(order_id):
 def edit_order(order_id):
     if current_user.role not in ['admin', 'moderator', 'operator']:
         flash('У вас нет прав для редактирования заказов', 'danger')
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('main.dashboard', is_index=False))
 
     form = OrderForm()
 
@@ -268,7 +268,7 @@ def edit_order(order_id):
                         cur.execute("SELECT id FROM shops WHERE id = %s", (form.shop_id.data,))
                         if not cur.fetchone():
                             flash('Выбранный магазин не существует', 'danger')
-                            return render_template('orders/edit.html', form=form, order_id=order_id)
+                            return render_template('orders/edit.html', form=form, order_id=order_id, is_index=False)
 
                         # Обновляем магазин заказа
                         cur.execute("UPDATE orders SET shop_id = %s WHERE id = %s", (form.shop_id.data, order_id))
@@ -296,7 +296,7 @@ def edit_order(order_id):
 
                         mysql.connection.commit()
                         flash('Заказ успешно обновлён!', 'success')
-                        return redirect(url_for('orders.order_details', order_id=order_id))
+                        return redirect(url_for('orders.order_details', order_id=order_id, is_index=False))
 
                     except Exception as e:
                         mysql.connection.rollback()
@@ -337,12 +337,13 @@ def edit_order(order_id):
                                    form=form,
                                    order_id=order_id,
                                    shop_name=shop_name,
-                                   product_names=product_names)
+                                   product_names=product_names,
+                                   is_index=False)
 
     except Exception as e:
         current_app.logger.error(f"Error in edit_order: {str(e)}", exc_info=True)
         flash('Ошибка при загрузке страницы редактирования', 'danger')
-        return redirect(url_for('orders.list_orders'))
+        return redirect(url_for('orders.list_orders', is_index=False))
 
 
 @orders_bp.route('/api/search/shops')
